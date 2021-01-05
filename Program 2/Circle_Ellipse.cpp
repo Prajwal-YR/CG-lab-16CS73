@@ -5,8 +5,7 @@ int xc, yc, r;										//Centre of circle and radius
 int rx, ry, xce, yce;								//Centre of ellipse and minor radius and major radius
 
 //Draws Circle
-void draw_circle(int xc, int yc, int x, int y)
-{
+void draw_circle(int xc, int yc, int x, int y){
 	glBegin(GL_POINTS);
 	glVertex2i(xc + x, yc + y);						
 	glVertex2i(xc - x, yc + y);
@@ -20,8 +19,7 @@ void draw_circle(int xc, int yc, int x, int y)
 }
 
 //Function to generate circle using Bresenham's circle drawing algorithm
-void circlebres()
-{
+void circlebres(){
 	glClear(GL_COLOR_BUFFER_BIT);						//Clears buffer bit
 	int x = 0, y = r;									//Initial value of x and y
 	int d = 3 - 2 * r;									//Initial value of decision parameter
@@ -42,25 +40,22 @@ void circlebres()
 }
 
 
-int p1_x, p2_x, p1_y, p2_y;
-int point1_done = 0;
+int p1_x, p2_x, p1_y, p2_y, point1_done = 0;
 
 
 void myMouseFunccircle(int button, int state, int x, int y)
 {
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1_done == 0)
-	{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1_done == 0)	{
 		p1_x = x - 250;
 		p1_y = 250 - y;
 		point1_done = 1;
 	}
-	else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)	{
 		p2_x = x - 250;
 		p2_y = 250 - y;
 		xc = p1_x;
 		yc = p1_y;
-		float exp = (p2_x - p1_x) * (p2_x - p1_x) + (p2_y - p1_y) * (p2_y - p1_y);
+		double exp = pow((p2_x - p1_x),2) + pow((p2_y - p1_y),2);
 		r = (int)(sqrt(exp));
 		circlebres();
 		point1_done = 0;
@@ -69,8 +64,7 @@ void myMouseFunccircle(int button, int state, int x, int y)
 
 
 /////ELLIPSE/////////////
-void draw_ellipse(int xce, int yce, int x, int y)
-{
+void draw_ellipse(int xce, int yce, int x, int y){
 	glBegin(GL_POINTS);
 	glVertex2i(x + xce, y + yce);
 	glVertex2i(-x + xce, y + yce);
@@ -80,8 +74,7 @@ void draw_ellipse(int xce, int yce, int x, int y)
 }
 
 //Function to generate ellipse using Bresenham's ellipse drawing algorithm
-void ellipsebres()
-{
+void ellipsebres(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	float dx, dy, d1, d2, x, y;
 	x = 0;
@@ -94,26 +87,20 @@ void ellipsebres()
 	dy = 2 * rx * rx * y;
 
 	// For region 1 (slope<1)
-	while (dx < dy)
-	{
+	while (dx < dy)	{
 
 		// Print points based on 4-way symmetry 
 		draw_ellipse(xce, yce, x, y);
 
-
-
 		// Checking and updating value of 
 		// decision parameter based on algorithm 
-		if (d1 < 0)
-		{
+		if (d1 < 0)	{
 			x++;
 			dx = dx + (2 * ry * ry);
 			d1 = d1 + dx + (ry * ry);
 		}
-		else
-		{
-			x++;
-			y--;
+		else {
+			x++; y--;
 			dx = dx + (2 * ry * ry);
 			dy = dy - (2 * rx * rx);
 			d1 = d1 + dx - dy + (ry * ry);
@@ -124,24 +111,20 @@ void ellipsebres()
 	d2 = ((ry * ry) * ((x + 0.5) * (x + 0.5))) + ((rx * rx) * ((y - 1) * (y - 1))) - (rx * rx * ry * ry);
 
 	// Plotting points of region 2 (slope>1)
-	while (y >= 0)
-	{
+	while (y >= 0)	{
 
 		// Print points based on 4-way symmetry 
 		draw_ellipse(xce, yce, x, y);
 
 		// Checking and updating parameter 
 		// value based on algorithm 
-		if (d2 > 0)
-		{
+		if (d2 > 0)	{
 			y--;
 			dy = dy - (2 * rx * rx);
 			d2 = d2 + (rx * rx) - dy;
 		}
-		else
-		{
-			y--;
-			x++;
+		else {
+			y--; x++;
 			dx = dx + (2 * ry * ry);
 			dy = dy - (2 * rx * rx);
 			d2 = d2 + dx - dy + (rx * rx);
@@ -155,29 +138,25 @@ int p1e_x, p2e_x, p1e_y, p2e_y, p3e_x, p3e_y;
 int point1e_done = 0;
 
 
-void myMouseFunc(int button, int state, int x, int y)
-{
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1e_done == 0)
-	{
+void myMouseFunc(int button, int state, int x, int y) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1e_done == 0){
 		p1e_x = x - 250;
 		p1e_y = 250 - y;
 		xce = p1e_x;
 		yce = p1e_y;
 		point1e_done = 1;
 	}
-	else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1e_done == 1)
-	{
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1e_done == 1)	{
 		p2e_x = x - 250;
 		p2e_y = 250 - y;
-		float exp = (p2e_x - p1e_x) * (p2e_x - p1e_x) + (p2e_y - p1e_y) * (p2e_y - p1e_y);
+		double exp = pow((p2e_x - p1e_x),2) + pow((p2e_y - p1e_y),2);
 		rx = (int)(sqrt(exp));
 		point1e_done = 2;
 	}
-	else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1e_done == 2)
-	{
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && point1e_done == 2)	{
 		p3e_x = x - 250;
 		p3e_y = 250 - y;
-		float exp = (p3e_x - p1e_x) * (p3e_x - p1e_x) + (p3e_y - p1e_y) * (p3e_y - p1e_y);
+		double exp = pow((p3e_x - p1e_x),2) + pow((p3e_y - p1e_y),2);
 		ry = (int)(sqrt(exp));
 		ellipsebres();
 		point1e_done = 0;
@@ -186,8 +165,6 @@ void myMouseFunc(int button, int state, int x, int y)
 
 
 void myDrawing()
-{ }
-void myDrawingc()
 { }
 
 void minit()
@@ -210,7 +187,7 @@ void main(int argc, char* argv[])
 	int id1 = glutCreateWindow("Circle");
 	glutSetWindow(id1);
 	glutMouseFunc(myMouseFunccircle);
-	glutDisplayFunc(myDrawingc);
+	glutDisplayFunc(myDrawing);
 	minit();
 	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(600, 100);
